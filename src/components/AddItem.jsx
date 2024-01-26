@@ -1,23 +1,39 @@
-// AddItem.js
 import React, { useState } from 'react';
+import SQLEngine from './SQLEngine';
 import { useData } from '../contextApi/DataContext';
-import SQLEditor from './sqlEditor';
+import QAEditor from './QAEditor';
 
 const AddItem = () => {
   const [showInput, setShowInput] = useState(false);
   const [question, setQuestion] = useState('');
+  const [sqlQuery, setSqlQuery] = useState('');
+  const [error, setError] = useState(null);
+  const [queryResult, setQueryResult] = useState([]);
 
-  const { Table } = useData(); // Use the context
+  const {defaultQueries} = useData();
 
   const handleAddItem = () => {
-    // Handle adding item logic
-
-    // Show the input field after adding item
     setShowInput(true);
+  };
+  const executeQuery = async () => {
+    try {
+      const engineResult = await SQLEngine(defaultQueries + sqlQuery);
+      if (engineResult.result) {
+        setQueryResult(engineResult.result);
+        setError(null);
+      } else {
+        setError(engineResult.error || 'Unknown error');
+        setQueryResult([]);
+      }
+    } catch (error) {
+      console.error(error);
+      setError(error.message || 'An unexpected error occurred.');
+      setQueryResult([]);
+    }
   };
 
   return (
-    <div>
+    <div className='my-2'>
       <button
         className="btn btn-primary mb-2"
         onClick={handleAddItem}
@@ -37,9 +53,12 @@ const AddItem = () => {
             placeholder="Enter question"
             className="mr-2"
           />
-
-          {/* Render SQLEditor component when typing in the input fields */}
-          {question && <SQLEditor queryResult={Table} />}
+          {question && <QAEditor 
+          executeQuery={executeQuery}
+          sqlQuery={sqlQuery} 
+          setSqlQuery={setSqlQuery} 
+          error={error}
+          queryResult={queryResult} />}
         </div>
       )}
     </div>

@@ -13,17 +13,21 @@ const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [executedQueries, setExecutedQueries] = useState([]);
 
-  const { setData } = useData(); // Use the context
+  const { setData, setQueries } = useData();
 
   const executeQuery = async () => {
     try {
-      setLoading(true);
-      const engineResult = await SQLEngine(sqlQuery);
+      const match = sqlQuery.match(/create\s+table\s+(\S+)/i);
+      const tableName = match ? match[1] : null;
+      const engineResult = await SQLEngine(sqlQuery + `select * from ${tableName};`);
+      console.log(tableName);
       if (engineResult.result) {
         setQueryResult(engineResult.result);
-        setData(engineResult.result)
+        setData(engineResult.result);
+        setQueries(sqlQuery);
+        setExecutedQueries([...executedQueries, sqlQuery]);
         setError(null);
       } else {
         setError(engineResult.error || 'Unknown error');
@@ -33,14 +37,13 @@ const SQLEditor = () => {
       console.error(error);
       setError(error.message || 'An unexpected error occurred.');
       setQueryResult([]);
-    } finally {
-      setLoading(false);
     }
   };
 
+
   return (
     <div className="container-fluid">
-      <AppNavbar onExecute={executeQuery} loading={loading} executeQuery={executeQuery} />
+      <AppNavbar onExecute={executeQuery} executedQueries={executedQueries} executeQuery={executeQuery} />
       <div className="row">
         <div className="col-12 col-md-6">
           <AceEditor

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SQLEditor from './components/sqlEditor';
 
 const App = () => {
