@@ -1,5 +1,3 @@
-import initSqlJs from 'sql.js';
-
 const SQLEngine = async (commands) => {
   try {
     const config = {
