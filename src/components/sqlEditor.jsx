@@ -18,8 +18,10 @@ const SQLEditor = () => {
 
   const { setTable, setDefaultQueries } = useData();
 
+  const sqlHeight = '500px';
+
   const executeQuery = async () => {
-    let engineResults = []; // Declare engineResults as an array
+    let engineResults = []; 
   
     try {
       const matches = sqlQuery.matchAll(/\bCREATE\s+TABLE\s+(\S+)/g);
@@ -55,7 +57,7 @@ const SQLEditor = () => {
 
   return (
     <div className="container-fluid">
-      <AppNavbar onExecute={executeQuery} executedQueries={executedQueries} executeQuery={executeQuery} />
+      <AppNavbar onExecute={executeQuery} executeQuery={executeQuery} />
       <div className="row">
         <div className="col-12 col-md-6">
           <AceEditor
@@ -67,12 +69,12 @@ const SQLEditor = () => {
             editorProps={{ $blockScrolling: true }}
             placeholder="Enter only the create and insert query..."
             fontSize={16}
-            height="500px"
+            height={sqlHeight}
             width="100%"
           />
         </div>
         <div className="col-12 col-md-6">
-          <QueryResultTable queryResult={queryResult} tables= {tables} />
+          <QueryResultTable queryResult={queryResult} tables= {tables}  maxHeight={sqlHeight}/>
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}

@@ -1,17 +1,12 @@
-// QueryResultTable.jsx
-
 import React from 'react';
 
-const QueryResultTable = ({ queryResult, tables }) => {
-  if (!queryResult || queryResult.length === 0) {
-    return <p>No result sets available</p>;
-  }
+const QueryResultTable = ({ queryResult, tables, maxHeight }) => {
 
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-12">
-          <div className="result-table-container" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <div className="result-table-container" style={{ maxHeight, overflowY: 'auto' }}>
             {queryResult.map((resultSet, index) => (
               <React.Fragment key={index}>
                 <h4>{tables && tables[index]}</h4>

@@ -9,13 +9,15 @@ const QAEditor = ({
    executeQuery,
    setSqlQuery,
    error,
-   queryResult
+   queryResult,
+   commandTypes
 }) => {
-
+  const qaHeight = '100px';
 
   return (
+    <>
    <div className="container-fluid">
-   <AppNavbar executeQuery={executeQuery} />
+   <AppNavbar executeQuery={executeQuery} commandTypes={commandTypes}/>
    <div className="row">
      <div className="col-12 col-md-6">
        <AceEditor
@@ -27,17 +29,19 @@ const QAEditor = ({
          editorProps={{ $blockScrolling: true }}
          placeholder="Enter your SQL query here"
          fontSize={16}
-         height="500px"
+         height={qaHeight}
          width="100%"
        />
      </div>
      <div className="col-12 col-md-6">
-       <QueryResultTable queryResult={queryResult} />
+       <QueryResultTable queryResult={queryResult} maxHeight={qaHeight} />
      </div>
-   <AddItem />
    </div>
+   
    {error && <div className="text-danger">{error}</div>}
  </div>
+ <AddItem />
+ </>
   )
 }
 
