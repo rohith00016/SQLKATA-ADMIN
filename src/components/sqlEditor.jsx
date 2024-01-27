@@ -14,23 +14,33 @@ const SQLEditor = () => {
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
   const [executedQueries, setExecutedQueries] = useState([]);
+  const [tables, setTables ] = useState([]);
 
-  const { setData, setQueries } = useData();
+  const { setTable, setDefaultQueries } = useData();
 
   const executeQuery = async () => {
+    let engineResults = []; // Declare engineResults as an array
+  
     try {
-      const match = sqlQuery.match(/create\s+table\s+(\S+)/i);
-      const tableName = match ? match[1] : null;
-      const engineResult = await SQLEngine(sqlQuery + `select * from ${tableName};`);
-      console.log(tableName);
-      if (engineResult.result) {
-        setQueryResult(engineResult.result);
-        setData(engineResult.result);
-        setQueries(sqlQuery);
+      const matches = sqlQuery.matchAll(/\bCREATE\s+TABLE\s+(\S+)/g);
+      const tableNames = Array.from(matches, match => match[1]);
+  
+      for (const tableName of tableNames) {
+        const engineResult = await SQLEngine(sqlQuery + `SELECT * FROM ${tableName};`);
+        console.log(tableName, engineResult);
+        setTables(prevTables => [...prevTables, tableName]);
+        engineResults.push({ tableName, engineResult });
+      }
+
+  
+      if (engineResults.length > 0) {
+        setQueryResult(engineResults.map(entry => entry.engineResult));
+        setTable(engineResults.result); 
+        setDefaultQueries(sqlQuery);
         setExecutedQueries([...executedQueries, sqlQuery]);
         setError(null);
       } else {
-        setError(engineResult.error || 'Unknown error');
+        setError('No results found');
         setQueryResult([]);
       }
     } catch (error) {
@@ -39,7 +49,9 @@ const SQLEditor = () => {
       setQueryResult([]);
     }
   };
-
+  
+  
+  
 
   return (
     <div className="container-fluid">
@@ -53,14 +65,14 @@ const SQLEditor = () => {
             onChange={setSqlQuery}
             name="sql-editor"
             editorProps={{ $blockScrolling: true }}
-            placeholder="Enter your SQL query here"
+            placeholder="Enter only the create and insert query..."
             fontSize={16}
             height="500px"
             width="100%"
           />
         </div>
         <div className="col-12 col-md-6">
-          <QueryResultTable queryResult={queryResult} />
+          <QueryResultTable queryResult={queryResult} tables= {tables} />
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}

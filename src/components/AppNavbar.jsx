@@ -3,11 +3,12 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 import { useData } from '../contextApi/DataContext';
 
 const AppNavbar = ({ executeQuery }) => {
-  const { Table } = useData(); 
+  const { defaultQueries, answers } = useData(); 
 
   const generateJSONData = () => {
     const jsonData = {
-      Table,
+      dataCMD: defaultQueries,
+      answers,
     };
 
     return JSON.stringify(jsonData, null, 2);

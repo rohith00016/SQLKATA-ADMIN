@@ -10,16 +10,27 @@ const AddItem = () => {
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
 
-  const {defaultQueries} = useData();
+  const {defaultQueries, answers, setAnswers} = useData();
 
   const handleAddItem = () => {
     setShowInput(true);
   };
+  
   const executeQuery = async () => {
+    let engineResults = [];
     try {
       const engineResult = await SQLEngine(defaultQueries + sqlQuery);
-      if (engineResult.result) {
-        setQueryResult(engineResult.result);
+      engineResults.push({ engineResult });
+  
+      if (question && answers && answers.length > 0) {
+        setAnswers([
+          ...answers,
+          { question: question, answer: sqlQuery, output: engineResults.map(entry => entry.engineResult) }
+        ]);
+      }
+  
+      if (engineResults && engineResults.length > 0) {
+        setQueryResult(engineResults.map(entry => entry.engineResult));
         setError(null);
       } else {
         setError(engineResult.error || 'Unknown error');
@@ -31,6 +42,9 @@ const AddItem = () => {
       setQueryResult([]);
     }
   };
+  
+  
+
 
   return (
     <div className='my-2'>

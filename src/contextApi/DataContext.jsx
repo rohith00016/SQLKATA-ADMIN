@@ -5,17 +5,10 @@ const DataContext = createContext();
 const DataProvider = ({ children }) => {
   const [Table, setTable] = useState(null);
   const [defaultQueries , setDefaultQueries] = useState(null);
-
-  const setData = (Data) => {
-    setTable(Data);
-  };
-
-  const setQueries = (query) =>{
-    setDefaultQueries(query);
-  }
+  const [answers, setAnswers] =useState([{}]);
 
   return (
-    <DataContext.Provider value={{Table, setData ,defaultQueries, setQueries}}>
+    <DataContext.Provider value={{Table, setTable ,defaultQueries, setDefaultQueries, answers, setAnswers}}>
       {children}
     </DataContext.Provider>
   );

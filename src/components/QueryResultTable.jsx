@@ -1,37 +1,46 @@
+// QueryResultTable.jsx
+
 import React from 'react';
 
-const QueryResultTable = ({ queryResult }) => {
+const QueryResultTable = ({ queryResult, tables }) => {
   if (!queryResult || queryResult.length === 0) {
-    return null;
+    return <p>No result sets available</p>;
   }
-
-  const { columns, values } = queryResult[0]; 
 
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-12">
-          <div className="result-table-container">
-            <table className="table table-bordered table-striped table-hover">
-              <thead>
-                <tr>
-                  {columns.map((columnName, index) => (
-                    <th key={index} id={`column-${columnName}`}>
-                      {columnName}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {values.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((value, colIndex) => (
-                      <td key={colIndex}>{value}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="result-table-container" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            {queryResult.map((resultSet, index) => (
+              <React.Fragment key={index}>
+                <h4>{tables && tables[index]}</h4>
+                {resultSet.result && resultSet.result[0] && resultSet.result[0].columns && resultSet.result[0].values ? (
+                  <table className="table table-bordered table-striped table-hover">
+                    <thead>
+                      <tr>
+                        {resultSet.result[0].columns.map((columnName, colIndex) => (
+                          <th key={colIndex} id={`column-${columnName}`}>
+                            {columnName}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {resultSet.result[0].values.map((row, rowIndex) => (
+                        <tr key={rowIndex}>
+                          {row.map((value, colIndex) => (
+                            <td key={colIndex}>{value}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>Invalid result set format</p>
+                )}
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
