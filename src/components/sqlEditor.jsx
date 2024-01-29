@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-monokai';
@@ -6,7 +6,7 @@ import SQLEngine from './SQLEngine';
 import QueryResultTable from './QueryResultTable';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AppNavbar from './AppNavbar';
-import AddItem from './AddItem';
+import AddQuestion from './AddQuestion';
 import { useData } from '../contextApi/DataContext';
 
 const SQLEditor = () => {
@@ -15,6 +15,7 @@ const SQLEditor = () => {
   const [queryResult, setQueryResult] = useState([]);
   const [executedQueries, setExecutedQueries] = useState([]);
   const [tables, setTables ] = useState([]);
+  const [showDownload] = useState(true);
 
   const { setTable, setDefaultQueries } = useData();
 
@@ -57,7 +58,7 @@ const SQLEditor = () => {
 
   return (
     <div className="container-fluid">
-      <AppNavbar onExecute={executeQuery} executeQuery={executeQuery} />
+      <AppNavbar onExecute={executeQuery} showAddQuestion={showAddQuestion} showDownload={showDownload} executeQuery={executeQuery} tables={tables}/>
       <div className="row">
         <div className="col-12 col-md-6">
           <AceEditor
@@ -74,11 +75,11 @@ const SQLEditor = () => {
           />
         </div>
         <div className="col-12 col-md-6">
-          <QueryResultTable queryResult={queryResult} tables= {tables}  maxHeight={sqlHeight}/>
+          <QueryResultTable queryResult={queryResult} tables={tables} maxHeight={sqlHeight}/>
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}
-      <AddItem />
+      <AddQuestion />
     </div>
   );
 };

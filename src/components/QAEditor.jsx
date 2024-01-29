@@ -2,7 +2,7 @@ import React from 'react'
 import AceEditor from 'react-ace';
 import AppNavbar from './AppNavbar';
 import QueryResultTable from './QueryResultTable';
-import AddItem from './AddItem';
+import AddQuestion from './AddQuestion';
 
 const QAEditor = ({
    sqlQuery,
@@ -12,7 +12,9 @@ const QAEditor = ({
    queryResult,
    commandTypes
 }) => {
+  
   const qaHeight = '100px';
+  
 
   return (
     <>
@@ -40,7 +42,7 @@ const QAEditor = ({
    
    {error && <div className="text-danger">{error}</div>}
  </div>
- <AddItem />
+ <AddQuestion />
  </>
   )
 }

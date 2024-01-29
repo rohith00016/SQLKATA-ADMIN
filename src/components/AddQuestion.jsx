@@ -3,7 +3,7 @@ import SQLEngine from './SQLEngine';
 import { useData } from '../contextApi/DataContext';
 import QAEditor from './QAEditor';
 
-const AddItem = () => {
+const AddQuestion = () => {
   const [showInput, setShowInput] = useState(false);
   const [question, setQuestion] = useState('');
   const [commandTypes,setCommandTypes] = useState('');
@@ -21,7 +21,7 @@ const AddItem = () => {
 
   const { defaultQueries, answers, setAnswers } = useData();
 
-  const handleAddItem = () => {
+  const handleAddQuestion = () => {
     setShowInput((prevShowInput) => !prevShowInput);
   };
 
@@ -33,7 +33,7 @@ const AddItem = () => {
 
       if (question && answers && answers.length > 0) {
         setAnswers([
-          ...answers,
+          ...answers.slice(1),
           {
             question: question,
             tags: commandTypes,
@@ -42,6 +42,7 @@ const AddItem = () => {
           },
         ]);
       }
+      
 
       if (engineResults && engineResults.length > 0) {
         setQueryResult(engineResults.map((entry) => entry.engineResult));
@@ -59,11 +60,12 @@ const AddItem = () => {
 
   return (
 <>
+
   <button
     className="btn btn-primary my-2"
-    onClick={handleAddItem}
+    onClick={handleAddQuestion}
   >
-    Add Item
+    Add Question
   </button>
 
   {showInput && (
@@ -131,4 +133,4 @@ const AddItem = () => {
   );
 };
 
-export default AddItem;
+export default AddQuestion;
