@@ -1,33 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-monokai';
 import SQLEngine from './SQLEngine';
 import QueryResultTable from './QueryResultTable';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import AppNavbar from './AppNavbar';
-import AddQuestion from './AddQuestion';
 import { useData } from '../contextApi/DataContext';
+import AddQuestion from './AddQuestion';
+import CmdTypes from './CmdTypes';
 
 const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
   const [executedQueries, setExecutedQueries] = useState([]);
-  const [tables, setTables ] = useState([]);
-  const [showDownload] = useState(true);
+  const [tables, setTables] = useState([]);
+  const [showDownloadButton] = useState(true);
 
   const { setTable, setDefaultQueries } = useData();
 
   const sqlHeight = '500px';
+  const removeComments = (sqlQuery)=>{
+    sqlQuery = sqlQuery.replace(/\/\*[\s\S]*?\*\//g, '');
+    sqlQuery = sqlQuery.replace(/--.*$/gm, '');
+    return sqlQuery;
+  }
+  
 
   const executeQuery = async () => {
-    let engineResults = []; 
-  
+    let engineResults = [];
+    setQueryResult([]);
+    let tableNames = [];
+    setTables([]);
+
     try {
-      const matches = sqlQuery.matchAll(/\bCREATE\s+TABLE\s+(\S+)/g);
-      const tableNames = Array.from(matches, match => match[1]);
-  
+      
+      const cleanedSqlQuery = removeComments(sqlQuery);
+      const matches = cleanedSqlQuery.matchAll(/\bCREATE\s+TABLE\s+(\S+)/gi);
+      tableNames = Array.from(matches, match => match[1]);
+
       for (const tableName of tableNames) {
         const engineResult = await SQLEngine(sqlQuery + `SELECT * FROM ${tableName};`);
         console.log(tableName, engineResult);
@@ -35,10 +46,9 @@ const SQLEditor = () => {
         engineResults.push({ tableName, engineResult });
       }
 
-  
       if (engineResults.length > 0) {
         setQueryResult(engineResults.map(entry => entry.engineResult));
-        setTable(engineResults.result); 
+        setTable(engineResults.result);
         setDefaultQueries(sqlQuery);
         setExecutedQueries([...executedQueries, sqlQuery]);
         setError(null);
@@ -52,13 +62,12 @@ const SQLEditor = () => {
       setQueryResult([]);
     }
   };
-  
-  
-  
 
   return (
     <div className="container-fluid">
-      <AppNavbar onExecute={executeQuery} showAddQuestion={showAddQuestion} showDownload={showDownload} executeQuery={executeQuery} tables={tables}/>
+      
+      <AppNavbar onExecute={executeQuery} showDownloadButton={showDownloadButton} executeQuery={executeQuery} tables={tables}/>
+      <CmdTypes />
       <div className="row">
         <div className="col-12 col-md-6">
           <AceEditor
@@ -69,16 +78,23 @@ const SQLEditor = () => {
             name="sql-editor"
             editorProps={{ $blockScrolling: true }}
             placeholder="Enter only the create and insert query..."
-            fontSize={16}
+            fontSize={18}
             height={sqlHeight}
             width="100%"
           />
         </div>
         <div className="col-12 col-md-6">
-          <QueryResultTable queryResult={queryResult} tables={tables} maxHeight={sqlHeight}/>
+          <QueryResultTable key={queryResult} queryResult={queryResult} tables={tables} maxHeight={sqlHeight}/>
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}
+      {tables.length > 0 && !error && (
+        <div className="container w-100 mt-4 p-3 bg-light border rounded">
+          <div className="text-center text-success">
+            {tables.join(', ')}
+          </div>
+        </div>
+      )}
       <AddQuestion />
     </div>
   );

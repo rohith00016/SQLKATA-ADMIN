@@ -2,13 +2,16 @@ import React from 'react';
 import axios from 'axios';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { useData } from '../contextApi/DataContext';
+import { useCmdType } from '../contextApi/CmdTypeContext';
 
-const AppNavbar = ({ executeQuery, tables, showDownload }) => {
-  const { defaultQueries, answers } = useData(); 
+const AppNavbar = ({ executeQuery, tables, showDownloadButton }) => {
+  const { defaultQueries, answers } = useData();
+  const {commandTypes} = useCmdType();
   
   const generateJSONData = () => {
     const jsonData = {
       tables,
+      tags:commandTypes,
       dataCMD: defaultQueries,
       answers,
     };
@@ -52,11 +55,12 @@ const AppNavbar = ({ executeQuery, tables, showDownload }) => {
       <Navbar.Collapse id="navbar">
         <Nav className="mr-auto">
         </Nav>
-        <Button variant="primary" onClick={executeQuery}>
-          Run 
+        <Button variant="success" onClick={executeQuery}>
+          Run Code
         </Button>
-        {showDownload && 
-        <Button className='mx-2' variant="secondary" onClick={downloadJSON}>
+
+        {showDownloadButton && 
+        <Button className='mx-2' variant="warning" onClick={downloadJSON}>
           Download JSON
         </Button>
         }

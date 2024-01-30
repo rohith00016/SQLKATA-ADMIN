@@ -3,7 +3,7 @@ import React from 'react';
 const QueryResultTable = ({ queryResult, tables, maxHeight }) => {
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" key={queryResult}>
       <div className="row">
         <div className="col-12">
           <div className="result-table-container" style={{ maxHeight, overflowY: 'auto' }}>

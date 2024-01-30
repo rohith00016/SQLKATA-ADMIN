@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {DataProvider} from './contextApi/DataContext.jsx'
+import CommonProvider from './contextApi/CommonProvider'
 import App from './App.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <DataProvider>
+    <CommonProvider>
     <App />
-    </DataProvider>
+    </CommonProvider>
   </React.StrictMode>,
 )
