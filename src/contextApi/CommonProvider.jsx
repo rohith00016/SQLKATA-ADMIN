@@ -2,14 +2,17 @@
 import React from 'react';
 import { CmdTypeProvider } from './CmdTypeContext'; 
 import { DataProvider } from './DataContext';
+import { ReadMeProvider } from './ReadmeContext';
 
 const CommonProvider = ({ children }) => {
   return (
-    <CmdTypeProvider>
       <DataProvider>
-        {children}
-      </DataProvider>
-    </CmdTypeProvider>
+        <ReadMeProvider>
+          <CmdTypeProvider>
+              {children}
+          </CmdTypeProvider>
+        </ReadMeProvider>
+      </DataProvider>    
   );
 };
 

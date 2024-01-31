@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SQLEngine from './SQLEngine';
+import SQLEngine from '../SQLEngine/SQLEngine';
 import { useData } from '../contextApi/DataContext';
 import QAEditor from './QAEditor';
 
@@ -60,7 +60,7 @@ const AddQuestion = () => {
       )}
 
       {showInput && (
-        <div className="mb-2">
+        <div className="my-3">
           <label htmlFor="question" className="form-label">
             Question:
           </label>

@@ -5,7 +5,7 @@ const CmdTypeContext = createContext();
 
 const CmdTypeProvider = ({ children }) => {
 
-   const [commandTypes, setCommandTypes] = useState('');
+   const [commandTypes, setCommandTypes] = useState([]);
 
    const handleCheckboxChange = (value) => {
       if (commandTypes.includes(value)) {

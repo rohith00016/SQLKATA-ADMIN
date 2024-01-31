@@ -2,30 +2,29 @@ import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-monokai';
-import SQLEngine from './SQLEngine';
+import SQLEngine from '../SQLEngine/SQLEngine';
 import QueryResultTable from './QueryResultTable';
 import AppNavbar from './AppNavbar';
 import { useData } from '../contextApi/DataContext';
 import AddQuestion from './AddQuestion';
 import CmdTypes from './CmdTypes';
+import WysiwygEditor from './WysiwygEditor';
 
 const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
   const [executedQueries, setExecutedQueries] = useState([]);
-  const [tables, setTables] = useState([]);
   const [showDownloadButton] = useState(true);
 
-  const { setTable, setDefaultQueries } = useData();
+  const { tables, setTables, setDefaultQueries } = useData();
 
   const sqlHeight = '500px';
-  const removeComments = (sqlQuery)=>{
+  const removeComments = (sqlQuery) => {
     sqlQuery = sqlQuery.replace(/\/\*[\s\S]*?\*\//g, '');
     sqlQuery = sqlQuery.replace(/--.*$/gm, '');
     return sqlQuery;
   }
-  
 
   const executeQuery = async () => {
     let engineResults = [];
@@ -34,7 +33,6 @@ const SQLEditor = () => {
     setTables([]);
 
     try {
-      
       const cleanedSqlQuery = removeComments(sqlQuery);
       const matches = cleanedSqlQuery.matchAll(/\bCREATE\s+TABLE\s+(\S+)/gi);
       tableNames = Array.from(matches, match => match[1]);
@@ -48,7 +46,6 @@ const SQLEditor = () => {
 
       if (engineResults.length > 0) {
         setQueryResult(engineResults.map(entry => entry.engineResult));
-        setTable(engineResults.result);
         setDefaultQueries(sqlQuery);
         setExecutedQueries([...executedQueries, sqlQuery]);
         setError(null);
@@ -65,11 +62,11 @@ const SQLEditor = () => {
 
   return (
     <div className="container-fluid">
-      
-      <AppNavbar onExecute={executeQuery} showDownloadButton={showDownloadButton} executeQuery={executeQuery} tables={tables}/>
+      <AppNavbar onExecute={executeQuery} showDownloadButton={showDownloadButton} executeQuery={executeQuery} />
+      <WysiwygEditor />
       <CmdTypes />
       <div className="row">
-        <div className="col-12 col-md-6">
+        <div className="col-md-6 mb-4">
           <AceEditor
             mode="sql"
             theme="monokai"
@@ -83,20 +80,20 @@ const SQLEditor = () => {
             width="100%"
           />
         </div>
-        <div className="col-12 col-md-6">
-          <QueryResultTable key={queryResult} queryResult={queryResult} tables={tables} maxHeight={sqlHeight}/>
+        <div className="col-md-6 mb-4">
+          <QueryResultTable key={queryResult} queryResult={queryResult} maxHeight={sqlHeight} />
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}
-      {tables.length > 0 && !error && (
-        <div className="container w-100 mt-4 p-3 bg-light border rounded">
+      {tables && tables.length > 0 && !error && (
+        <div className="container w-100 my-4 p-3 bg-light border rounded">
           <div className="text-center text-success">
             {tables.join(', ')}
           </div>
         </div>
-      )}
+      )}          
       <AddQuestion />
-    </div>
+      </div>
   );
 };
 

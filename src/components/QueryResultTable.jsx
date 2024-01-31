@@ -1,6 +1,9 @@
 import React from 'react';
+import { useData } from '../contextApi/DataContext';
 
-const QueryResultTable = ({ queryResult, tables, maxHeight }) => {
+const QueryResultTable = ({ queryResult, maxHeight }) => {
+
+  const { tables } = useData();
 
   return (
     <div className="container-fluid" key={queryResult}>
