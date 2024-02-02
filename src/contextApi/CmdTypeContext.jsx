@@ -2,26 +2,20 @@ import { createContext, useContext, useState } from "react";
 
 const CmdTypeContext = createContext();
 
-
 const CmdTypeProvider = ({ children }) => {
+  const [commandType, setCommandType] = useState('');
 
-   const [commandTypes, setCommandTypes] = useState([]);
+  const handleCheckboxChange = (type) => {
+    setCommandType(type);
+  };
 
-   const handleCheckboxChange = (value) => {
-      if (commandTypes.includes(value)) {
-        setCommandTypes(commandTypes.filter(type => type !== value));
-      } else {
-        setCommandTypes([...commandTypes, value]);
-      }
-    };
- 
-   return (
-     <CmdTypeContext.Provider value={{commandTypes, handleCheckboxChange}}>
-       {children}
-     </CmdTypeContext.Provider>
-   );
- };
- 
- const useCmdType = () => useContext(CmdTypeContext);
- 
- export { CmdTypeProvider, useCmdType };
+  return (
+    <CmdTypeContext.Provider value={{ commandType, handleCheckboxChange }}>
+      {children}
+    </CmdTypeContext.Provider>
+  );
+};
+
+const useCmdType = () => useContext(CmdTypeContext);
+
+export { CmdTypeProvider, useCmdType };

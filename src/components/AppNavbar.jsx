@@ -4,17 +4,24 @@ import { Navbar } from 'react-bootstrap';
 import { useData } from '../contextApi/DataContext';
 import { useCmdType } from '../contextApi/CmdTypeContext';
 import { useReadMe } from '../contextApi/ReadmeContext';
+import { useDescription } from '../contextApi/DescriptionContext';
 
 const AppNavbar = ({ executeQuery, showDownloadButton }) => {
-  const { defaultQueries, answers, tables } = useData();
-  const { commandTypes } = useCmdType();
+  const { defaultQueries, answers, tables, dataTableCMD } = useData();
+  const { commandType } = useCmdType();
   const { readMe } = useReadMe();
+  const { description } = useDescription();
+
+  const [error, setError] = useState(null);
 
   const generateJSONData = () => {
     const jsonData = {
-      tables,
-      tags: commandTypes,
+      tableNames: tables,
+      tags: ['sql', commandType],
+      status: ["unsolved"],
       dataCMD: defaultQueries,
+      dataTableCMD,
+      description,
       answers,
       readme: readMe,
     };
@@ -22,20 +29,42 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
   };
 
   const downloadJSON = async () => {
-    const jsonData = generateJSONData();
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data.json';
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
     try {
+      setError(null);
+
+      if (!tables || tables.length === 0) {
+        setError('Please create atleast one table & insert values');
+        return;
+      }
+
+      if (!commandType) {
+        setError('Please select a command type before downloading.');
+        return;
+      }
+
+      if (!answers || answers.length === 0) {
+        setError('Please provide answers before downloading.');
+        return;
+      }
+      
+      if (!description || description.length === 0) {
+        setError('Please provide description before downloading.');
+        return;
+      }
+
+      const jsonData = generateJSONData();
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
       const response = await axios.post(
         'http://localhost:3000/questions/addQuestions',
         jsonData,
@@ -47,25 +76,25 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
       );
 
       console.log('POST request successful:', response.data);
-      return response.data;
     } catch (error) {
       console.error('Error making POST request:', error.message);
-      throw error;
+      setError(error.message || 'An unexpected error occurred.');
     }
   };
 
   return (
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
+      {/* ... (other components) */}
       <div className="container-fluid">
         <span className="navbar-brand mb-0 h1">SQL Editor</span>
         <div className="d-flex">
-        <button
-           className="btn btn-success me-2"
-           onClick={executeQuery}
-           style={{ backgroundColor: 'green', borderColor: 'darkgreen' }}
-        >
-        Run Code
-        </button>
+          <button
+            className="btn btn-success me-2"
+            onClick={executeQuery}
+            style={{ backgroundColor: 'green', borderColor: 'darkgreen' }}
+          >
+            Run Code
+          </button>
 
           {showDownloadButton && (
             <button
@@ -75,6 +104,12 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
             >
               Download JSON
             </button>
+          )}
+
+          {error && (
+            <div className="alert alert-danger m-2" role="alert">
+              {error}
+            </div>
           )}
         </div>
       </div>

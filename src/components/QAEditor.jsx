@@ -3,14 +3,17 @@ import AceEditor from 'react-ace';
 import AppNavbar from './AppNavbar';
 import QueryResultTable from './QueryResultTable';
 import AddQuestion from './AddQuestion';
+import '../styles/QAEditor.css'
 
 const QAEditor = ({
+  
   sqlQuery,
   executeQuery,
   setSqlQuery,
   error,
   queryResult,
   commandTypes,
+
 }) => {
   const qaHeight = '120px';
 
@@ -27,10 +30,11 @@ const QAEditor = ({
               onChange={setSqlQuery}
               name="sql-editor"
               editorProps={{ $blockScrolling: true }}
-              placeholder="Enter your SQL query here"
+              placeholder="Enter your select query here"
               fontSize={18}
               height={qaHeight}
               width="100%"
+              className="myEditor"
             />
           </div>
           <div className="col-12 col-md-6">

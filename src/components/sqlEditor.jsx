@@ -9,6 +9,8 @@ import { useData } from '../contextApi/DataContext';
 import AddQuestion from './AddQuestion';
 import CmdTypes from './CmdTypes';
 import WysiwygEditor from './WysiwygEditor';
+import '../styles/SQLEditor.css';
+import Description from './Description';
 
 const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
@@ -17,13 +19,13 @@ const SQLEditor = () => {
   const [executedQueries, setExecutedQueries] = useState([]);
   const [showDownloadButton] = useState(true);
 
-  const { tables, setTables, setDefaultQueries } = useData();
+  const { tables, setTables, setDefaultQueries, setTableData, dataTableCMD, setDataTableCMD } = useData();
 
   const sqlHeight = '500px';
   const removeComments = (sqlQuery) => {
     sqlQuery = sqlQuery.replace(/\/\*[\s\S]*?\*\//g, '');
     sqlQuery = sqlQuery.replace(/--.*$/gm, '');
-    return sqlQuery;
+    return sqlQuery.toLowerCase();
   }
 
   const executeQuery = async () => {
@@ -31,6 +33,7 @@ const SQLEditor = () => {
     setQueryResult([]);
     let tableNames = [];
     setTables([]);
+    setDataTableCMD([]);
 
     try {
       const cleanedSqlQuery = removeComments(sqlQuery);
@@ -41,11 +44,13 @@ const SQLEditor = () => {
         const engineResult = await SQLEngine(sqlQuery + `SELECT * FROM ${tableName};`);
         console.log(tableName, engineResult);
         setTables(prevTables => [...prevTables, tableName]);
+        setDataTableCMD(prevData => [...prevData, `SELECT * FROM ${tableName}`]);
         engineResults.push({ tableName, engineResult });
       }
 
       if (engineResults.length > 0) {
         setQueryResult(engineResults.map(entry => entry.engineResult));
+        setTableData(engineResults.map(entry => entry.engineResult));
         setDefaultQueries(sqlQuery);
         setExecutedQueries([...executedQueries, sqlQuery]);
         setError(null);
@@ -64,24 +69,27 @@ const SQLEditor = () => {
     <div className="container-fluid">
       <AppNavbar onExecute={executeQuery} showDownloadButton={showDownloadButton} executeQuery={executeQuery} />
       <WysiwygEditor />
+      <Description />
       <CmdTypes />
       <div className="row">
         <div className="col-md-6 mb-4">
-          <AceEditor
-            mode="sql"
-            theme="monokai"
-            value={sqlQuery}
-            onChange={setSqlQuery}
-            name="sql-editor"
-            editorProps={{ $blockScrolling: true }}
-            placeholder="Enter only the create and insert query..."
-            fontSize={18}
-            height={sqlHeight}
-            width="100%"
-          />
+        <AceEditor
+              mode="sql"
+              theme="monokai"
+              value={sqlQuery}
+              onChange={setSqlQuery}
+              name="sql-editor"
+              editorProps={{ $blockScrolling: true }}
+              placeholder="Enter your select query here"
+              fontSize={18}
+              height={sqlHeight}
+              width="100%"
+              className="myEditor"
+/>
+
         </div>
         <div className="col-md-6 mb-4">
-          <QueryResultTable key={queryResult} queryResult={queryResult} maxHeight={sqlHeight} />
+          <QueryResultTable key={queryResult} error={error} queryResult={queryResult} maxHeight={sqlHeight} />
         </div>
       </div>
       {error && <div className="text-danger">{error}</div>}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useData } from '../contextApi/DataContext';
 
-const QueryResultTable = ({ queryResult, maxHeight }) => {
+const QueryResultTable = ({ queryResult, maxHeight, error }) => {
 
   const { tables } = useData();
 
@@ -35,7 +35,7 @@ const QueryResultTable = ({ queryResult, maxHeight }) => {
                     </tbody>
                   </table>
                 ) : (
-                  <p>Invalid result set format</p>
+                  {error} && <div className="text-danger">{error}</div>
                 )}
               </React.Fragment>
             ))}

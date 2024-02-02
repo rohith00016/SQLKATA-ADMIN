@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SQLEngine from '../SQLEngine/SQLEngine';
 import { useData } from '../contextApi/DataContext';
 import QAEditor from './QAEditor';
@@ -12,35 +12,37 @@ const AddQuestion = () => {
 
   const { defaultQueries, answers, setAnswers } = useData();
 
+  useEffect(() => {
+    setAnswers(answers.slice(1));
+  }, []);
+
   const handleAddQuestion = () => {
     setShowInput(true);
   };
 
   const executeQuery = async () => {
+    if (!question.trim() || !sqlQuery.trim()) {
+      setError('Please enter both the question and SQL query.');
+      return;
+    }
+
     let engineResults = [];
     setQueryResult([]);
     try {
       const engineResult = await SQLEngine(defaultQueries + sqlQuery);
       engineResults.push({ engineResult });
 
-      if (question && answers && answers.length > 0) {
-        setAnswers([
-          ...answers.slice(1),
-          {
-            question: question,
-            answer: sqlQuery,
-            output: engineResults.map((entry) => entry.engineResult),
-          },
-        ]);
-      }
+      setAnswers([
+        ...answers,
+        {
+          question: question,
+          answer: sqlQuery,
+          output: engineResults.map((entry) => entry.engineResult),
+        },
+      ]);
 
-      if (engineResults && engineResults.length > 0) {
-        setQueryResult(engineResults.map((entry) => entry.engineResult));
-        setError(null);
-      } else {
-        setError(engineResult.error || 'Unknown error');
-        setQueryResult([]);
-      }
+      setQueryResult(engineResults.map((entry) => entry.engineResult));
+      setError(null);
     } catch (error) {
       console.error(error);
       setError(error.message || 'An unexpected error occurred.');
