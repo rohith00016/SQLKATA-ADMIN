@@ -5,14 +5,13 @@ import { useData } from '../contextApi/DataContext';
 import { useCmdType } from '../contextApi/CmdTypeContext';
 import { useReadMe } from '../contextApi/ReadmeContext';
 import { useDescription } from '../contextApi/DescriptionContext';
+import { toast } from 'react-toastify';
 
 const AppNavbar = ({ executeQuery, showDownloadButton }) => {
   const { defaultQueries, answers, tables, dataTableCMD } = useData();
   const { commandType } = useCmdType();
   const { readMe } = useReadMe();
   const { description } = useDescription();
-
-  const [error, setError] = useState(null);
 
   const generateJSONData = () => {
     const jsonData = {
@@ -30,26 +29,21 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
 
   const downloadJSON = async () => {
     try {
-      setError(null);
 
       if (!tables || tables.length === 0) {
-        setError('Please create atleast one table & insert values');
-        return;
+        throw new Error('Please create at least one table & insert values.');
       }
 
       if (!commandType) {
-        setError('Please select a command type before downloading.');
-        return;
+        throw new Error('Please select a command type before downloading.');
       }
 
       if (!answers || answers.length === 0) {
-        setError('Please provide answers before downloading.');
-        return;
+        throw new Error('Please provide answers before downloading.');
       }
-      
+
       if (!description || description.length === 0) {
-        setError('Please provide description before downloading.');
-        return;
+        throw new Error('Please provide description before downloading.');
       }
 
       const jsonData = generateJSONData();
@@ -59,11 +53,7 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
       const a = document.createElement('a');
       a.href = url;
       a.download = 'data.json';
-      document.body.appendChild(a);
       a.click();
-
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
 
       const response = await axios.post(
         'http://localhost:3000/questions/addQuestions',
@@ -76,15 +66,17 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
       );
 
       console.log('POST request successful:', response.data);
+
+      toast.success('JSON data downloaded and sent to server successfully!');
+
     } catch (error) {
-      console.error('Error making POST request:', error.message);
-      setError(error.message || 'An unexpected error occurred.');
+      console.error('Error:', error);
+      toast.error(`Error: ${error || 'An unexpected error occurred.'}`);
     }
   };
 
   return (
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
-      {/* ... (other components) */}
       <div className="container-fluid">
         <span className="navbar-brand mb-0 h1">SQL Editor</span>
         <div className="d-flex">
@@ -104,12 +96,6 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
             >
               Download JSON
             </button>
-          )}
-
-          {error && (
-            <div className="alert alert-danger m-2" role="alert">
-              {error}
-            </div>
           )}
         </div>
       </div>

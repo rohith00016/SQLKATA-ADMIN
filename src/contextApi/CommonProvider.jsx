@@ -4,9 +4,11 @@ import { CmdTypeProvider } from './CmdTypeContext';
 import { DataProvider } from './DataContext';
 import { ReadMeProvider } from './ReadmeContext';
 import { DescriptionProvider } from './DescriptionContext';
+import ToastProvider from './ToastContext';
 
 const CommonProvider = ({ children }) => {
   return (
+    <ToastProvider>
       <DataProvider>
         <ReadMeProvider>
           <CmdTypeProvider>
@@ -15,7 +17,8 @@ const CommonProvider = ({ children }) => {
             </DescriptionProvider>
           </CmdTypeProvider>
         </ReadMeProvider>
-      </DataProvider>    
+      </DataProvider>
+    </ToastProvider>   
   );
 };
 

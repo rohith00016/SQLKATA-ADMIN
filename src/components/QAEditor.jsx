@@ -3,24 +3,27 @@ import AceEditor from 'react-ace';
 import AppNavbar from './AppNavbar';
 import QueryResultTable from './QueryResultTable';
 import AddQuestion from './AddQuestion';
-import '../styles/QAEditor.css'
+import '../styles/QAEditor.css';
 
 const QAEditor = ({
-  
   sqlQuery,
   executeQuery,
   setSqlQuery,
-  error,
   queryResult,
   commandTypes,
-
 }) => {
   const qaHeight = '120px';
+
+
+  const handleRunQuery = async () => {
+    await executeQuery();
+  }
+  
 
   return (
     <>
       <div className="container-fluid">
-        <AppNavbar executeQuery={executeQuery} commandTypes={commandTypes} />
+        <AppNavbar executeQuery={handleRunQuery} commandTypes={commandTypes} />
         <div className="row">
           <div className="col-12 col-md-6">
             <AceEditor
@@ -41,7 +44,6 @@ const QAEditor = ({
             <QueryResultTable queryResult={queryResult} maxHeight={qaHeight} />
           </div>
         </div>
-        {error && <div className="text-danger">{error}</div>}
       </div>
       <AddQuestion />
     </>

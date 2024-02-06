@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SQLEngine from '../SQLEngine/SQLEngine';
 import { useData } from '../contextApi/DataContext';
 import QAEditor from './QAEditor';
+import { toast } from 'react-toastify';
 
 const AddQuestion = () => {
   const [showInput, setShowInput] = useState(false);
@@ -13,40 +14,74 @@ const AddQuestion = () => {
   const { defaultQueries, answers, setAnswers } = useData();
 
   useEffect(() => {
-    setAnswers(answers.slice(1));
-  }, []);
+    setAnswers((prevAnswers) => prevAnswers.slice(1));
+  }, [setAnswers]);
 
   const handleAddQuestion = () => {
     setShowInput(true);
   };
 
+  const handleQuestionChange = (event) => {
+    setQuestion(event.target.value);
+  };
+
+  const handleSqlQueryChange = (newSqlQuery) => {
+    setSqlQuery(newSqlQuery);
+  };
+
   const executeQuery = async () => {
+    setError(null);
     if (!question.trim() || !sqlQuery.trim()) {
       setError('Please enter both the question and SQL query.');
+  
+      toast.error('Please enter both the question and SQL query.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+  
       return;
     }
 
-    let engineResults = [];
-    setQueryResult([]);
     try {
       const engineResult = await SQLEngine(defaultQueries + sqlQuery);
-      engineResults.push({ engineResult });
 
-      setAnswers([
-        ...answers,
+      setAnswers((prevAnswers) => [
+        ...prevAnswers,
         {
           question: question,
           answer: sqlQuery,
-          output: engineResults.map((entry) => entry.engineResult),
+          output: [engineResult],
         },
       ]);
 
-      setQueryResult(engineResults.map((entry) => entry.engineResult));
+      setQueryResult([engineResult]);
       setError(null);
+
+      toast.success('Question added successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (error) {
       console.error(error);
-      setError(error.message || 'An unexpected error occurred.');
+      setError(error.message);
       setQueryResult([]);
+
+      toast.error(`Error: ${error.message}`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -63,28 +98,25 @@ const AddQuestion = () => {
 
       {showInput && (
         <div className="my-3">
-          <label htmlFor="question" className="form-label">
-            Question:
-          </label>
+          <label htmlFor="question">Question:</label>
           <input
             type="text"
             id="question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Enter question"
             className="form-control"
+            value={question}
+            onChange={handleQuestionChange}
+          />
+
+          <label htmlFor="sqlQuery" className="mt-2">SQL Query:</label>
+          <QAEditor
+            executeQuery={executeQuery}
+            sqlQuery={sqlQuery}
+            setSqlQuery={handleSqlQueryChange}
+            error={error}
+            setError={setError}
+            queryResult={queryResult}
           />
         </div>
-      )}
-
-      {showInput && (
-        <QAEditor
-          executeQuery={executeQuery}
-          sqlQuery={sqlQuery}
-          setSqlQuery={setSqlQuery}
-          error={error}
-          queryResult={queryResult}
-        />
       )}
     </>
   );
