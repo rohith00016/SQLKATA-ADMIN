@@ -20,7 +20,7 @@ const SQLEditor = () => {
   const [showDownloadButton] = useState(true);
   const [error, setError] = useState();
 
-  const { tables, setTables, setDefaultQueries, setTableData, dataTableCMD, setDataTableCMD } = useData();
+  const { tables, setTables, setDefaultQueries, setTableData, setDataTableCMD } = useData();
 
   const sqlHeight = '500px';
   

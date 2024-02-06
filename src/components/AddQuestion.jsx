@@ -11,7 +11,7 @@ const AddQuestion = () => {
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
 
-  const { defaultQueries, answers, setAnswers } = useData();
+  const { defaultQueries, setAnswers } = useData();
 
   useEffect(() => {
     setAnswers((prevAnswers) => prevAnswers.slice(1));

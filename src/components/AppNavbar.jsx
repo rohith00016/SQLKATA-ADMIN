@@ -56,7 +56,7 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
       a.click();
 
       const response = await axios.post(
-        'http://localhost:3000/questions/addQuestions',
+        'https://sqleditor-server.onrender.com/questions/addQuestions',
         jsonData,
         {
           headers: {
