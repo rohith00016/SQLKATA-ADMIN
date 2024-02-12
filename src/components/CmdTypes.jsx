@@ -5,7 +5,7 @@ const CmdTypes = () => {
   const { commandType, handleCheckboxChange } = useCmdType();
 
   return (
-    <div className="my-4 mx-4 d-flex align-items-center">
+    <div className="my-3 mx-20 d-flex align-items-center">
       <label className="me-2">Select Commands:</label>
       {["dml", "dcl", "tcl", "dql"].map((type) => (
         <div key={type} className="form-check me-3">

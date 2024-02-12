@@ -1,7 +1,7 @@
 const SQLEngine = async (commands) => {
   try {
     const config = {
-      locateFile: (filename) => `/src/${filename}`,
+      locateFile: () => `./node_modules/sql.js/dist/sql-wasm.wasm`
     };
 
     const SQL = await initSqlJs(config);

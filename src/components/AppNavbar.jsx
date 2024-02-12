@@ -6,18 +6,22 @@ import { useCmdType } from '../contextApi/CmdTypeContext';
 import { useReadMe } from '../contextApi/ReadmeContext';
 import { useDescription } from '../contextApi/DescriptionContext';
 import { toast } from 'react-toastify';
+import { useHardLevel } from '../contextApi/HardLevelContext';
 
-const AppNavbar = ({ executeQuery, showDownloadButton }) => {
+const AppNavbar = ({ executeQuery, mainQuestion, showDownloadButton }) => {
   const { defaultQueries, answers, tables, dataTableCMD } = useData();
   const { commandType } = useCmdType();
   const { readMe } = useReadMe();
   const { description } = useDescription();
+  const { HardLevel } = useHardLevel();
 
   const generateJSONData = () => {
     const jsonData = {
+      questionName: mainQuestion,
+      hardnessScore: HardLevel,
       tableNames: tables,
       tags: ['sql', commandType],
-      status: ["unsolved"],
+      status: "unsolved",
       dataCMD: defaultQueries,
       dataTableCMD,
       description,
@@ -56,7 +60,8 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
       a.click();
 
       const response = await axios.post(
-        'https://sqleditor-server.onrender.com/questions/addQuestions',
+        //'http://localhost:3000/questions/addQuestions',
+        "https://sqleditor-server.onrender.com/questions/addQuestions",
         jsonData,
         {
           headers: {
@@ -64,7 +69,6 @@ const AppNavbar = ({ executeQuery, showDownloadButton }) => {
           },
         }
       );
-
       console.log('POST request successful:', response.data);
 
       toast.success('JSON data downloaded and sent to server successfully!');

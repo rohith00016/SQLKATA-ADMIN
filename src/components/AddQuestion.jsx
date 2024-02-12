@@ -4,6 +4,7 @@ import { useData } from '../contextApi/DataContext';
 import QAEditor from './QAEditor';
 import { toast } from 'react-toastify';
 
+
 const AddQuestion = () => {
   const [showInput, setShowInput] = useState(false);
   const [question, setQuestion] = useState('');
@@ -104,7 +105,7 @@ const AddQuestion = () => {
             id="question"
             className="form-control"
             value={question}
-            onChange={handleQuestionChange}
+            onChange={handleQuestionChange} 
           />
 
           <label htmlFor="sqlQuery" className="mt-2">SQL Query:</label>

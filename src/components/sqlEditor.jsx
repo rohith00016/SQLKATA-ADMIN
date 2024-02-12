@@ -12,6 +12,7 @@ import CmdTypes from './CmdTypes';
 import WysiwygEditor from './WysiwygEditor';
 import '../styles/SQLEditor.css';
 import Description from './Description';
+import HardnessScore from './HardnessScore';
 
 const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
@@ -19,10 +20,19 @@ const SQLEditor = () => {
   const [executedQueries, setExecutedQueries] = useState([]);
   const [showDownloadButton] = useState(true);
   const [error, setError] = useState();
+  const [mainQuestion, setMainQuestion] = useState();
+
 
   const { tables, setTables, setDefaultQueries, setTableData, setDataTableCMD } = useData();
 
   const sqlHeight = '500px';
+
+  const handleMainQuestionChange = (event) => {
+    setMainQuestion(event.target.value);
+  };
+
+
+
   
   const removeComments = (sqlQuery) => {
     sqlQuery = sqlQuery.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -97,11 +107,29 @@ const SQLEditor = () => {
   
 
   return (
-    <div className="container-fluid">
-      <AppNavbar onExecute={executeQuery} showDownloadButton={showDownloadButton} executeQuery={executeQuery} />
+  <div className="container-fluid">
+    <AppNavbar onExecute={executeQuery} mainQuestion={mainQuestion} showDownloadButton={showDownloadButton} executeQuery={executeQuery} />
+    <div className="my-3">
+    <label htmlFor={`mainQuestion`}>Question:</label>
+      <input
+        type="text"
+        id={'mainQuestion'}
+        className="form-control"
+        value={mainQuestion}
+        onChange={handleMainQuestionChange}
+      />
+    </div>
+    <div className='row'>
+      <div className='col'>
+        <HardnessScore />
+      </div>
+      <div className='col'>
+        <CmdTypes />
+      </div>
+    </div>
       <WysiwygEditor />
       <Description />
-      <CmdTypes />
+      
       <div className="row">
         <div className="col-md-6 mb-4">
           <AceEditor
