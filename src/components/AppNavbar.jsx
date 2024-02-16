@@ -1,83 +1,16 @@
 import React from 'react';
-import axios from 'axios';
 import { Navbar } from 'react-bootstrap';
-import { useData } from '../contextApi/DataContext';
-import { useCmdType } from '../contextApi/CmdTypeContext';
-import { useReadMe } from '../contextApi/ReadmeContext';
-import { useDescription } from '../contextApi/DescriptionContext';
-import { toast } from 'react-toastify';
-import { useHardLevel } from '../contextApi/HardLevelContext';
+import { useNavigate} from 'react-router-dom';
 
-const AppNavbar = ({ executeQuery, mainQuestion, showDownloadButton }) => {
-  const { defaultQueries, answers, tables, dataTableCMD } = useData();
-  const { commandType } = useCmdType();
-  const { readMe } = useReadMe();
-  const { description } = useDescription();
-  const { HardLevel } = useHardLevel();
+const AppNavbar = ({ executeQuery, showDownloadButton, setShowDownloadButton }) => {
 
-  const generateJSONData = () => {
-    const jsonData = {
-      questionName: mainQuestion,
-      hardnessScore: HardLevel,
-      tableNames: tables,
-      tags: ['sql', commandType],
-      status: "unsolved",
-      dataCMD: defaultQueries,
-      dataTableCMD,
-      description,
-      answers,
-      readme: readMe,
-    };
-    return JSON.stringify(jsonData, null, 2);
-  };
+  const navigate = useNavigate();
 
-  const downloadJSON = async () => {
-    try {
+  const handlePreview = () =>{
+    setShowDownloadButton(!showDownloadButton);
+    navigate('/preview')
+  }
 
-      if (!tables || tables.length === 0) {
-        throw new Error('Please create at least one table & insert values.');
-      }
-
-      if (!commandType) {
-        throw new Error('Please select a command type before downloading.');
-      }
-
-      if (!answers || answers.length === 0) {
-        throw new Error('Please provide answers before downloading.');
-      }
-
-      if (!description || description.length === 0) {
-        throw new Error('Please provide description before downloading.');
-      }
-
-      const jsonData = generateJSONData();
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'data.json';
-      a.click();
-
-      const response = await axios.post(
-        //'http://localhost:3000/questions/addQuestions',
-        "https://sqleditor-server.onrender.com/questions/addQuestions",
-        jsonData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('POST request successful:', response.data);
-
-      toast.success('JSON data downloaded and sent to server successfully!');
-
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error(`Error: ${error || 'An unexpected error occurred.'}`);
-    }
-  };
 
   return (
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
@@ -91,16 +24,16 @@ const AppNavbar = ({ executeQuery, mainQuestion, showDownloadButton }) => {
           >
             Run Code
           </button>
-
           {showDownloadButton && (
+            /**/
             <button
-              className="btn btn-warning"
-              onClick={downloadJSON}
-              style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
-            >
-              Download JSON
-            </button>
-          )}
+            className="btn btn-warning"
+            onClick={handlePreview}
+            style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
+          >
+            Preview
+          </button>
+          )} 
         </div>
       </div>
     </Navbar>

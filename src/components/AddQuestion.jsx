@@ -12,7 +12,7 @@ const AddQuestion = () => {
   const [error, setError] = useState(null);
   const [queryResult, setQueryResult] = useState([]);
 
-  const { defaultQueries, setAnswers } = useData();
+  const { defaultQueries, setAnswers, tables } = useData();
 
   useEffect(() => {
     setAnswers((prevAnswers) => prevAnswers.slice(1));
@@ -47,9 +47,26 @@ const AddQuestion = () => {
       return;
     }
 
+    const containsTable = tables.some(table => sqlQuery.includes(table));
+
+    if (!containsTable) {
+      setError('Table not found');
+  
+      toast.error('Table not found', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+  
+      return;
+    }
+
     try {
       const engineResult = await SQLEngine(defaultQueries + sqlQuery);
-
+      
       setAnswers((prevAnswers) => [
         ...prevAnswers,
         {

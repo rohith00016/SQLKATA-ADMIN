@@ -6,6 +6,7 @@ import { ReadMeProvider } from './ReadmeContext';
 import { DescriptionProvider } from './DescriptionContext';
 import ToastProvider from './ToastContext';
 import { HardLevelProvider } from './HardLevelContext';
+import { MarkDownProvider } from './MarkDownContext';
 
 const CommonProvider = ({ children }) => {
   return (
@@ -14,9 +15,12 @@ const CommonProvider = ({ children }) => {
         <ReadMeProvider>
           <CmdTypeProvider>
             <DescriptionProvider>
+              <MarkDownProvider>
               <HardLevelProvider>
               {children}
+
               </HardLevelProvider>
+              </MarkDownProvider>
             </DescriptionProvider>
           </CmdTypeProvider>
         </ReadMeProvider>
