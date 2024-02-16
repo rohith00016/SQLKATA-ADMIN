@@ -9,7 +9,7 @@ import AppNavbar from './AppNavbar';
 import { useData } from '../contextApi/DataContext';
 import AddQuestion from './AddQuestion';
 import CmdTypes from './CmdTypes';
-import MarkDownEditor from './MarkdownEditor';
+import MarkdownEditor from './MardownEditor';
 import '../styles/SQLEditor.css';
 import Description from './Description';
 import HardnessScore from './HardnessScore';
@@ -127,7 +127,7 @@ const SQLEditor = () => {
         <CmdTypes />
       </div>
     </div>
-      <MarkDownEditor />
+      <MarkdownEditor />
       <Description />
       <>SQL editor</>
       <div className="row mt-2">

@@ -38,7 +38,7 @@ const editorStyle = {
   overflow: 'hidden',
 };
 
-export default function MarkDownEditor() {
+export default function MarkdownEditor() {
   const { MarkDown, handleMarkDownChange } = useMarkDown();
 
   return (
@@ -46,7 +46,7 @@ export default function MarkDownEditor() {
       <MDXEditor
         markdown={MarkDown}
         onChange={handleMarkDownChange}
-        language="markdown" // Set language to Markdown
+        language="markdown" 
         plugins={[
           quotePlugin(),
           listsPlugin(),
@@ -68,6 +68,7 @@ export default function MarkDownEditor() {
     </div>
   );
 }
+
 /*
 //not working sql block
 
