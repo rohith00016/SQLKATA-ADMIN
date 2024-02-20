@@ -1,10 +1,10 @@
 import React from 'react';
-import SQLEditor from './components/sqlEditor';
+import SQLEditor from './components/editors/SQLEditor';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/styles/toasts.css';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { PreviewComponent } from './components/PreviewComponent';
+import { PreviewComponent } from './components/preview/PreviewComponent';
 
 const App = () => {
   return (

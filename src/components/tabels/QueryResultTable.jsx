@@ -1,5 +1,5 @@
 import React from 'react';
-import { useData } from '../contextApi/DataContext';
+import { useData } from '../../contextApi/DataContext';
 
 const QueryResultTable = ({ queryResult, maxHeight, error }) => {
 

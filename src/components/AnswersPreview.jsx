@@ -1,6 +1,6 @@
 import React from 'react';
 import { useData } from '../contextApi/DataContext';
-import TableCreate from './TableCreate';
+import TableCreate from './tabels/TableCreate';
 
 const AnswersPreview = () => {
   const { answers } = useData();

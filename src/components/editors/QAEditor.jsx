@@ -1,9 +1,9 @@
 import React from 'react';
 import AceEditor from 'react-ace';
-import AppNavbar from './AppNavbar';
-import QueryResultTable from './QueryResultTable';
-import AddQuestion from './AddQuestion';
-import '../styles/QAEditor.css';
+import AppNavbar from '../navbar/AppNavbar';
+import QueryResultTable from '../tabels/QueryResultTable';
+import AddQuestion from '../AddQuestion';
+import '../../styles/QAEditor.css';
 
 const QAEditor = ({
   sqlQuery,

@@ -3,18 +3,18 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-monokai';
 import { toast} from 'react-toastify';
-import SQLEngine from '../SQLEngine/SQLEngine';
-import QueryResultTable from './QueryResultTable';
-import AppNavbar from './AppNavbar';
-import { useData } from '../contextApi/DataContext';
-import AddQuestion from './AddQuestion';
-import CmdTypes from './CmdTypes';
-import MarkdownEditor from './MardownEditor';
-import '../styles/SQLEditor.css';
-import Description from './Description';
-import HardnessScore from './HardnessScore';
-//import { Accordion } from 'react-bootstrap';
-import { AccordionTable } from './AccordionTable';
+import SQLEngine from '../../SQLEngine/SQLEngine';
+import QueryResultTable from '../tabels/QueryResultTable';
+import AppNavbar from '../navbar/AppNavbar';
+import { useData } from '../../contextApi/DataContext';
+import AddQuestion from '../AddQuestion';
+import CmdTypes from '../inputs/CmdTypes';
+import MarkdownEditor from '../markdown/MardownEditor';
+import '../../styles/SQLEditor.css';
+import Description from '../inputs/Description';
+import HardnessScore from '../inputs/HardnessScore';
+
+
 
 const SQLEditor = () => {
   const [sqlQuery, setSqlQuery] = useState('');
@@ -150,14 +150,14 @@ const SQLEditor = () => {
           <QueryResultTable key={queryResult} error={error} queryResult={queryResult} maxHeight={sqlHeight} />
         </div>
       </div>
-      {tables && tables.length > 0 && !error && (
-       /* <div className="container w-100 my-4 p-3 bg-light border rounded">
+      {/* {tables && tables.length > 0 && !error && (
+        <div className="container w-100 my-4 p-3 bg-light border rounded">
           <div className="text-center text-success">
             {tables.join(', ')}
           </div>
-        </div> */
-      <AccordionTable queryResult={queryResult} tables={tables}/>
-      )}
+        </div> 
+       <AccordionTable queryResult={queryResult} tables={tables}/>
+      )}  */}
       <AddQuestion />
     </div>
   );

@@ -1,6 +1,7 @@
-/* import React from 'react';
+ import React from 'react';
 import MarkdownEditor from '@uiw/react-markdown-editor';
-import { useMarkDown } from '../contextApi/MarkDownContext';
+import '@uiw/react-markdown-editor/markdown-editor.css';
+import { useMarkDown } from '../../contextApi/MarkDownContext';
 
 const MarkDownEditor = () => {
   const { MarkDown, handleMarkDownChange } = useMarkDown();
@@ -12,7 +13,7 @@ const MarkDownEditor = () => {
           value={MarkDown}
           onChange={handleMarkDownChange} 
           height={500} // Set the height to make it large
-          dark={false} // Set dark mode to false for a light theme
+          theme="light" // Set dark mode to false for a light theme
           preview="live" // Show live preview
           placeholder="Write your Markdown here..." // Placeholder text
         />
@@ -24,7 +25,7 @@ const MarkDownEditor = () => {
 export default MarkDownEditor;
 
 // working code ....
-*/
+/*
 import React from 'react';
 import { MDXEditor, toolbarPlugin,  UndoRedo, BoldItalicUnderlineToggles, BlockTypeSelect, ListsToggle, quotePlugin, listsPlugin, headingsPlugin, tablePlugin, CodeToggle } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
@@ -68,7 +69,7 @@ export default function MarkdownEditor() {
     </div>
   );
 }
-
+*/
 /*
 //not working sql block
 

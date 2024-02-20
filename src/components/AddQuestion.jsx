@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SQLEngine from '../SQLEngine/SQLEngine';
 import { useData } from '../contextApi/DataContext';
-import QAEditor from './QAEditor';
+import QAEditor from './editors/QAEditor';
 import { toast } from 'react-toastify';
 
 

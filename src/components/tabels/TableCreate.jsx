@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/TableCreate.css";
+import "../../styles/TableCreate.css";
 
 const TableCreate = ({ columns, values }) => {
   return (

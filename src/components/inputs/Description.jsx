@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDescription } from '../contextApi/DescriptionContext';
+import { useDescription } from '../../contextApi/DescriptionContext';
 
 const Description = () => {
  

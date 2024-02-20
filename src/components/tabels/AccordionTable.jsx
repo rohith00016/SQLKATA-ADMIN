@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Accordion from "react-bootstrap/Accordion";
-import TableCreate from "../components/TableCreate";
-//import SQLEngine from "../../../../Utils/SQLEngine";
-import "../styles/AccordionTable.css";
-import { useData } from "../contextApi/DataContext";
-//import { useData } from "../contextApi/DataContext";
+import TableCreate from "./TableCreate";
+import "../../styles/TableCreate.css";
+import { useData } from "../../contextApi/DataContext";
 
 export const AccordionTable = () => {
 

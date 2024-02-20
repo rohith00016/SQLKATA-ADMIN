@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCmdType } from '../contextApi/CmdTypeContext';
+import { useCmdType } from '../../contextApi/CmdTypeContext';
 
 const CmdTypes = () => {
   const { commandType, handleCheckboxChange } = useCmdType();

@@ -1,21 +1,23 @@
 import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import MarkdownPreview from './MarkDownPreview'
-import { AccordionTable } from './AccordionTable'
-import AnswersPreview from './AnswersPreview'
-import { useCmdType } from '../contextApi/CmdTypeContext'
-import { useReadMe } from '../contextApi/ReadmeContext'
-import { useDescription } from '../contextApi/DescriptionContext'
-import { useHardLevel } from '../contextApi/HardLevelContext'
-import { useData } from '../contextApi/DataContext'
+import MarkdownPreview from '../markdown/MarkDownPreview'
+import { AccordionTable } from '../tabels/AccordionTable'
+import AnswersPreview from '../AnswersPreview'
+import { useCmdType } from '../../contextApi/CmdTypeContext'
+import { useReadMe } from '../../contextApi/ReadmeContext'
+import { useDescription } from '../../contextApi/DescriptionContext'
+import { useHardLevel } from '../../contextApi/HardLevelContext'
+import { useData } from '../../contextApi/DataContext'
 import { Navbar } from 'react-bootstrap';
+import { useMarkDown } from '../../contextApi/MarkDownContext';
 
 
 export const PreviewComponent = () => {
 
   const { defaultQueries, answers, tables, mainQuestion, dataTableCMD } = useData();
-  const { commandType } = useCmdType
+  const { commandType } = useCmdType();
+  const { MarkDown } = useMarkDown();
   const { readMe } = useReadMe();
   const { description } = useDescription();
   const { HardLevel } = useHardLevel();
@@ -30,8 +32,8 @@ export const PreviewComponent = () => {
        dataCMD: defaultQueries,
        dataTableCMD,
        description,
+       readme: MarkDown,       
        answers,
-       readme: readMe,
      };
      return JSON.stringify(jsonData, null, 2);
    };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHardLevel } from '../contextApi/HardLevelContext';
+import { useHardLevel } from '../../contextApi/HardLevelContext';
 
 const HardnessScore = () => {
   const [hardnessScore, setHardnessScore] = useState();
