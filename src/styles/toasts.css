@@ -1,38 +1,64 @@
 /* toastStyles.css */
 
-/* Customize the appearance of the toast container */
 .Toastify__toast-container {
-   z-index: 9999;
- }
- 
- /* Customize the appearance of the toast notification */
- .Toastify__toast {
-   font-family: 'Roboto', sans-serif;
-   border-radius: 8px;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- }
- 
- /* Customize the appearance of the success toast */
- .Toastify__toast--success {
-   background-color: #4caf50;
-   color: #fff;
- }
- 
- /* Customize the appearance of the error toast */
- .Toastify__toast--error {
-   background-color: #f44336;
-   color: #fff;
- }
- 
- /* Customize the appearance of the info toast */
- .Toastify__toast--info {
-   background-color: #2196f3;
-   color: #fff;
- }
- 
- /* Customize the appearance of the warning toast */
- .Toastify__toast--warning {
-   background-color: #ff9800;
-   color: #fff;
- }
- 
+  z-index: 9999;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.Toastify__toast {
+  font-family: 'Montserrat', sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 16px 24px;
+  margin-bottom: 16px;
+  max-width: 300px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Toastify__toast--success {
+  background-color: #008000;
+}
+
+.Toastify__toast--error {
+  background-color: #ff0000;
+}
+
+.Toastify__toast--info {
+  background-color: #0066cc;
+}
+
+.Toastify__toast--warning {
+  background-color: #ff9900;
+}
+
+.Toastify__message {
+  font-size: 16px;
+}
+
+.Toastify__icon {
+  font-size: 24px;
+  margin-right: 12px;
+  color: #fff; /* Set icon color to white */
+  float: left; /* Float the icon to the left */
+}
+
+.Toastify__icon svg {
+  fill: #fff; /* Ensure SVG icons inherit white color */
+}
+
+.Toastify__close-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+}
+
+.Toastify__close-button:hover {
+  color: #ccc;
+}

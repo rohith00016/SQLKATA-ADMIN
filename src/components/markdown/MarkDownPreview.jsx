@@ -13,8 +13,9 @@ const MarkdownPreview = () => {
       <div className="card">
         <div className="card-body">
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
-        code({ node, inline, className, children, ...props }) {
+          code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
+
           return !inline && match ? (
             <SyntaxHighlighter
               style={atomDark}
@@ -29,10 +30,9 @@ const MarkdownPreview = () => {
               {children}
             </code>
           );
-        }
-      }}>
-        {MarkDown}
-      </ReactMarkdown>
+          }
+          }}>{MarkDown}
+        </ReactMarkdown>
         </div>
       </div>
     </div>

@@ -11,13 +11,13 @@ export const AccordionTable = () => {
   return (
     <Accordion className="w-100">
       <Accordion.Item eventKey="0">
-      <Accordion.Header>
-        {tables && tables.length > 0 ? (
-          `Tables: ${tables.join(", ")}`
-        ) : (
-          <p>Tables are not created</p>
-        )}
-      </Accordion.Header>
+        <Accordion.Header>
+          {tables && tables.length > 0 ? (
+            `Tables: ${tables.join(", ")}`
+          ) : (
+            <p>Tables are not created</p>
+          )}
+        </Accordion.Header>
 
         <Accordion.Body>
           <div className="d-flex gap-3">

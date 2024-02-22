@@ -5,7 +5,6 @@ import MarkdownPreview from '../markdown/MarkDownPreview'
 import { AccordionTable } from '../tabels/AccordionTable'
 import AnswersPreview from '../AnswersPreview'
 import { useCmdType } from '../../contextApi/CmdTypeContext'
-import { useReadMe } from '../../contextApi/ReadmeContext'
 import { useDescription } from '../../contextApi/DescriptionContext'
 import { useHardLevel } from '../../contextApi/HardLevelContext'
 import { useData } from '../../contextApi/DataContext'
@@ -18,7 +17,6 @@ export const PreviewComponent = () => {
   const { defaultQueries, answers, tables, mainQuestion, dataTableCMD } = useData();
   const { commandType } = useCmdType();
   const { MarkDown } = useMarkDown();
-  const { readMe } = useReadMe();
   const { description } = useDescription();
   const { HardLevel } = useHardLevel();
 

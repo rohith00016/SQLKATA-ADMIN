@@ -24,7 +24,7 @@ const SQLEditor = () => {
   const {mainQuestion, setMainQuestion} = useData();
 
 
-  const { tables, setTables, setDefaultQueries, queryResult, setQueryResult, setTableData, setDataTableCMD } = useData();
+  const { tables, setTables, setDefaultQueries, queryResult, setQueryResult, setDataTableCMD } = useData();
 
   const sqlHeight = '500px';
 
@@ -51,10 +51,10 @@ const SQLEditor = () => {
     const containsInsert = /INSERT\s+INTO/i.test(cleanedSqlQuery);
     
     if (!containsCreate || !containsInsert) {
-      setError('SQL query must contain both CREATE and INSERT queries.');
-      toast.error('SQL query must contain both CREATE and INSERT queries.', {
+      setError('Create & insert .');
+      toast.error('Create & insert .', {
         position: 'top-right',
-        autoClose: 5000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -70,7 +70,7 @@ const SQLEditor = () => {
   
       for (const tableName of tableNames) {
         const engineResult = await SQLEngine(sqlQuery + `SELECT * FROM ${tableName};`);
-       // console.log(tableName, engineResult);
+        // console.log(tableName, engineResult);
         setTables((prevTables) => [...prevTables, tableName]);
         setDataTableCMD((prevData) => [...prevData, `SELECT * FROM ${tableName}`]);
         engineResults.push({ tableName, engineResult });
@@ -78,7 +78,6 @@ const SQLEditor = () => {
   
       if (engineResults.length > 0) {
         setQueryResult(engineResults.map((entry) => entry.engineResult));
-        setTableData(engineResults.map((entry) => entry.engineResult));
         setDefaultQueries(sqlQuery);
         setExecutedQueries([...executedQueries, sqlQuery]);
   
@@ -108,28 +107,32 @@ const SQLEditor = () => {
 
   return (
   <div className="container-fluid">
-    <AppNavbar onExecute={executeQuery} mainQuestion={mainQuestion} showDownloadButton={showDownloadButton} setShowDownloadButton={setShowDownloadButton} executeQuery={executeQuery} />
-    <div className="my-3">
-    <label htmlFor={`mainQuestion`}>Question:</label>
-      <input
-        type="text"
-        id={'mainQuestion'}
-        className="form-control"
-        value={mainQuestion}
-        onChange={handleMainQuestionChange}
-      />
-    </div>
-    <div className='row'>
-      <div className='col'>
-        <HardnessScore />
+    <AppNavbar 
+      showDownloadButton={showDownloadButton} 
+      setShowDownloadButton={setShowDownloadButton} 
+      executeQuery={executeQuery}
+    />
+      <div className="my-3">
+        <label htmlFor={`mainQuestion`}>Question:</label>
+          <input
+            type="text"
+            id={'mainQuestion'}
+            className="form-control"
+            value={mainQuestion}
+            onChange={handleMainQuestionChange}
+          />
       </div>
-      <div className='col'>
-        <CmdTypes />
+      <div className='row'>
+        <div className='col'>
+          <HardnessScore />
+        </div>
+        <div className='col'>
+          <CmdTypes />
+        </div>
       </div>
-    </div>
       <MarkdownEditor />
       <Description />
-      <>SQL editor</>
+      SQL editor:
       <div className="row mt-2">
         <div className="col-md-6 mb-4">
           <AceEditor
@@ -147,17 +150,17 @@ const SQLEditor = () => {
           />
         </div>
         <div className="col-md-6 mb-4">
-          <QueryResultTable key={queryResult} error={error} queryResult={queryResult} maxHeight={sqlHeight} />
+          <QueryResultTable error={error} queryResult={queryResult} maxHeight={sqlHeight} />
         </div>
       </div>
-      {/* {tables && tables.length > 0 && !error && (
+      {tables && tables.length > 0 && !error && (
         <div className="container w-100 my-4 p-3 bg-light border rounded">
           <div className="text-center text-success">
             {tables.join(', ')}
           </div>
         </div> 
-       <AccordionTable queryResult={queryResult} tables={tables}/>
-      )}  */}
+      // <AccordionTable queryResult={queryResult} tables={tables}/>
+      )}
       <AddQuestion />
     </div>
   );

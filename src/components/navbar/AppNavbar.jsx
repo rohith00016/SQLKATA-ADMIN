@@ -11,7 +11,6 @@ const AppNavbar = ({ executeQuery, showDownloadButton, setShowDownloadButton }) 
     navigate('/preview')
   }
 
-
   return (
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
       <div className="container-fluid">
@@ -25,7 +24,6 @@ const AppNavbar = ({ executeQuery, showDownloadButton, setShowDownloadButton }) 
             Run Code
           </button>
           {showDownloadButton && (
-            /**/
             <button
             className="btn btn-warning"
             onClick={handlePreview}
