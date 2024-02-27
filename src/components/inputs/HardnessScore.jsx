@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHardLevel } from '../../contextApi/HardLevelContext';
 
 const HardnessScore = () => {
-  const [hardnessScore, setHardnessScore] = useState();
-  const { setHardLevel } = useHardLevel()
+  const { HardLevel, setHardLevel } = useHardLevel();
 
   const handleHardnessScoreChange = (event) => {
-    setHardnessScore(event.target.value);
-    setHardLevel(event.target.value);
+    const selectedScore = event.target.value;
+    setHardLevel(selectedScore);
   };
 
   return (
@@ -21,7 +20,7 @@ const HardnessScore = () => {
               id={score}
               name="hardnessScore"
               value={score}
-              checked={hardnessScore === score}
+              checked={HardLevel === score}
               onChange={handleHardnessScoreChange}
               className="form-check-input"
             />

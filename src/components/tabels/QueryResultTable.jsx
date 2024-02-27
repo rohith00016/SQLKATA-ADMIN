@@ -10,7 +10,7 @@ const QueryResultTable = ({ queryResult, maxHeight, error }) => {
       <div className="row">
         <div className="col-12">
           <div className="result-table-container" style={{ maxHeight, overflowY: 'auto' }}>
-            {queryResult.map((resultSet, index) => (
+            {queryResult && queryResult.map((resultSet, index) => (
               <React.Fragment key={index}>
                 <h4>{tables && tables[index]}</h4>
                 {resultSet.result && resultSet.result[0] && resultSet.result[0].columns && resultSet.result[0].values ? (

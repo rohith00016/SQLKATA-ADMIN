@@ -5,11 +5,13 @@ import { DescriptionProvider } from './DescriptionContext';
 import ToastProvider from './ToastContext';
 import { HardLevelProvider } from './HardLevelContext';
 import { MarkDownProvider } from './MarkDownContext';
+import { QuestionProvider } from './QuestionContext';
 
 const CommonProvider = ({ children }) => {
   return (
     <ToastProvider>
       <DataProvider>
+        <QuestionProvider>
           <CmdTypeProvider>
             <DescriptionProvider>
               <MarkDownProvider>
@@ -19,6 +21,7 @@ const CommonProvider = ({ children }) => {
               </MarkDownProvider>
             </DescriptionProvider>
           </CmdTypeProvider>
+          </QuestionProvider>
       </DataProvider>
     </ToastProvider>   
   );

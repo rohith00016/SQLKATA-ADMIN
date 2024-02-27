@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import MarkdownPreview from '../markdown/MarkDownPreview'
@@ -10,6 +10,7 @@ import { useHardLevel } from '../../contextApi/HardLevelContext'
 import { useData } from '../../contextApi/DataContext'
 import { Navbar } from 'react-bootstrap';
 import { useMarkDown } from '../../contextApi/MarkDownContext';
+import { useNavigate } from 'react-router-dom';
 
 
 export const PreviewComponent = () => {
@@ -19,6 +20,14 @@ export const PreviewComponent = () => {
   const { MarkDown } = useMarkDown();
   const { description } = useDescription();
   const { HardLevel } = useHardLevel();
+  const { backButton, setBackButton } = useData();
+  const navigate = useNavigate();
+
+  const handleMainPage = () =>{
+    navigate('/');
+    setBackButton(true);
+    console.log(backButton);
+  }
 
   const generateJSONData = () => {
      const jsonData = {
@@ -48,7 +57,7 @@ export const PreviewComponent = () => {
        }
  
        if (!answers || answers.length === 0) {
-         throw new Error('Please provide answers before downloading.');
+         throw new Error('Please provide Q&A before downloading.');
        }
  
        if (!description || description.length === 0) {
@@ -87,17 +96,26 @@ export const PreviewComponent = () => {
   return (
     <div className='mx-2'>
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
-      <div className="container-fluid">
-        <span className="navbar-brand mb-0 h1">SQL Editor</span>    
-      <button
-          className="btn btn-warning"
-          onClick={downloadJSON}
-          style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
-        >
-          Download JSON
-        </button>
+      <div className="container-fluid d-flex justify-content-between align-items-center">
+        <span className="navbar-brand mb-0 h1">SQL Editor</span>
+        <div>
+          <button
+            className="btn btn-warning mx-2"
+            onClick={handleMainPage}
+            style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
+          >
+            Main Page
+          </button>
+          <button
+            className="btn btn-warning"
+            onClick={downloadJSON}
+            style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
+          >
+            Download JSON
+          </button>
         </div>
-        </Navbar>
+      </div>
+    </Navbar>
       <h6 className='mx-2 my-4'>Markdown Preview:</h6>
       <MarkdownPreview />
       <h6 className='mx-2 my-4'>Table preview:</h6>

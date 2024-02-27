@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar } from 'react-bootstrap';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AppNavbar = ({ executeQuery, showDownloadButton, setShowDownloadButton }) => {
-
   const navigate = useNavigate();
 
-  const handlePreview = () =>{
+
+  const handlePreview = () => {
+   // localStorage.setItem("sqlQuery", sqlQuery);
     setShowDownloadButton(!showDownloadButton);
-    navigate('/preview')
-  }
+    navigate('/preview');
+  };
 
   return (
     <Navbar bg="dark" variant="dark" className="mx-0 my-3 rounded">
@@ -25,13 +26,13 @@ const AppNavbar = ({ executeQuery, showDownloadButton, setShowDownloadButton }) 
           </button>
           {showDownloadButton && (
             <button
-            className="btn btn-warning"
-            onClick={handlePreview}
-            style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
-          >
-            Preview
-          </button>
-          )} 
+              className="btn btn-warning"
+              onClick={handlePreview}
+              style={{ backgroundColor: 'orange', borderColor: 'darkorange' }}
+            >
+              Preview
+            </button>
+          )}
         </div>
       </div>
     </Navbar>

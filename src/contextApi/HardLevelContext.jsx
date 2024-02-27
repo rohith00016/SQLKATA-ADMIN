@@ -5,7 +5,7 @@ const HardLevelContext = createContext();
 
 const HardLevelProvider = ({ children }) => {
 
-   const [HardLevel, setHardLevel] = useState('easy');
+   const [HardLevel, setHardLevel] = useState('');
 
    return (
      <HardLevelContext.Provider value={{HardLevel, setHardLevel}}>

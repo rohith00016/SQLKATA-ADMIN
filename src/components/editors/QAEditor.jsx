@@ -10,15 +10,13 @@ const QAEditor = ({
   executeQuery,
   setSqlQuery,
   queryResult,
-  commandTypes,
+  commandTypes
 }) => {
   const qaHeight = '120px';
-
 
   const handleRunQuery = async () => {
     await executeQuery();
   }
-  
 
   return (
     <>
@@ -45,7 +43,6 @@ const QAEditor = ({
           </div>
         </div>
       </div>
-      <AddQuestion />
     </>
   );
 };
